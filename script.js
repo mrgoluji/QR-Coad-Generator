@@ -23,21 +23,21 @@ generateBtn.addEventListener("click", () => {
     downloadBtn.style.display = "block";
 
 });
-
 downloadBtn.addEventListener("click", () => {
 
-    let qrImage = qrBox.querySelector("img");
+    const canvas = qrBox.querySelector("canvas");
 
-    if (qrImage) {
-
-        let link = document.createElement("a");
-
-        link.href = qrImage.src;
-
-        link.download = "QRCode.png";
-
-        link.click();
-
+    if (!canvas) {
+        alert("Please generate a QR Code first.");
+        return;
     }
+
+    const link = document.createElement("a");
+
+    link.download = "QRCode.png";
+
+    link.href = canvas.toDataURL("image/png");
+
+    link.click();
 
 });
