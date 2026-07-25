@@ -1,42 +1,50 @@
 const input = document.getElementById("qr-input");
 const generateBtn = document.getElementById("generate-btn");
-const qrBox = document.getElementById("qr-box");
 const downloadBtn = document.getElementById("download-btn");
 
-generateBtn.addEventListener("click", () => {
+const qr = new QRious({
+    element: document.getElementById("qr-canvas"),
+    size: 220,
+    value: " "
+});
 
-    let text = input.value.trim();
+// Generate QR
+generateBtn.addEventListener("click", generateQR);
+
+// Enter Key Support
+input.addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+        generateQR();
+    }
+});
+
+function generateQR() {
+
+    const text = input.value.trim();
 
     if (text === "") {
         alert("Please enter text or URL.");
         return;
     }
 
-    qrBox.innerHTML = "";
-
-    new QRCode(qrBox, {
-        text: text,
-        width: 200,
-        height: 200
-    });
+    qr.value = text;
 
     downloadBtn.style.display = "block";
 
-});
-downloadBtn.addEventListener("click", () => {
+}
 
-    const canvas = qrBox.querySelector("canvas");
+// Download PNG
+downloadBtn.addEventListener("click", function () {
 
-    if (!canvas) {
-        alert("Please generate a QR Code first.");
-        return;
-    }
+    const canvas = document.getElementById("qr-canvas");
+
+    const image = canvas.toDataURL("image/png");
 
     const link = document.createElement("a");
 
-    link.download = "QRCode.png";
+    link.href = image;
 
-    link.href = canvas.toDataURL("image/png");
+    link.download = "QRCode.png";
 
     link.click();
 
